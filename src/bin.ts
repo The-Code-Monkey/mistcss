@@ -38,7 +38,7 @@ if (fs.statSync(fileOrDir).isFile()) {
 } else {
   const cwd = fileOrDir || process.cwd()
 
-  const mistGlob = '**/*.mist.css'
+  const mistGlob = '**/*.mist.{css,scss}'
   const genGlob = '**/*.mist.tsx'
 
   const mistFiles = await globby(mistGlob, { cwd })

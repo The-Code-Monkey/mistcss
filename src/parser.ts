@@ -1,7 +1,8 @@
 import { compile, Element } from 'stylis'
 
 // Components in a MistCSS file
-export type Components = Record<string, Component>
+export type Components = Record<string, Component>;
+export type CssType = 'css' | 'scss';
 
 export type Component = {
   tag: string

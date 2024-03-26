@@ -2,11 +2,15 @@ import assert from 'node:assert'
 import fs from 'node:fs'
 import test from 'node:test'
 
-import { type Components, parseInput, camelCase, pascalCase } from './parser.js'
+import {camelCase, type Components, parseInput, pascalCase} from './parser.js'
 
-// Fixtures
-const mistCSS: string = fs.readFileSync('fixtures/Foo.mist.css', 'utf-8')
+// CSS Fixtures
+const mistCSS: string = fs.readFileSync('fixtures/css/Foo.mist.css', 'utf-8')
 
+// SCSS Fixtures
+const mistSCSS: string = fs.readFileSync('fixtures/scss/Foo.mist.scss', 'utf-8')
+
+// CSS
 test('toCamelCase', () => {
   const arr = ['foo', 'foo-bar', 'f', 'f-b']
   const actual = arr.map(camelCase)
@@ -22,8 +26,33 @@ test('toPascalCase', () => {
 })
 
 void test('parseInput', () => {
-  const input: string = mistCSS
-  const actual: Components = parseInput(input)
+  const actual: Components = parseInput(mistCSS)
+  const expected: Components = {
+    Foo: {
+      tag: 'div',
+      data: {
+        fooSize: ['lg', 'sm'],
+        x: true,
+      },
+    },
+    Bar: {
+      tag: 'span',
+      data: {
+        barSize: ['lg'],
+        x: true,
+      },
+    },
+    Baz: {
+      tag: 'p',
+      data: {},
+    },
+  }
+  assert.deepStrictEqual(actual, expected)
+})
+
+// SCSS
+void test('parseInput SCSS', () => {
+  const actual: Components = parseInput(mistSCSS)
   const expected: Components = {
     Foo: {
       tag: 'div',
