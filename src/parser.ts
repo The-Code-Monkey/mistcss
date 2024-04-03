@@ -30,9 +30,11 @@ function visit(nodes: Element[]): { type: string; props: string[], children?: El
   let result: { type: string; props: string[], children?: Element['children'], parent?: Element['parent'] }[] = []
 
   for (const node of nodes) {
-    if (node.type === 'decl') console.log(node);
-    if (['@scope', 'rule', 'decl'].includes(node.type) && Array.isArray(node.props)) {
-      result.push({ type: node.type, props: node.props, children: node.type === 'decl' ? node.children : undefined, parent: node.type === 'decl' ? node.parent : undefined })
+    if (node.type === 'decl' && node.props.startsWith('--')) {
+      result.push({ type: node.type, props: node.props, children: node.children, parent: node.parent })
+    }
+    if (['@scope', 'rule'].includes(node.type) && Array.isArray(node.props)) {
+      result.push({ type: node.type, props: node.props })
     }
 
     if (Array.isArray(node.children)) {
