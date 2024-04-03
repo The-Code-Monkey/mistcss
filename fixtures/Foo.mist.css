@@ -1,5 +1,6 @@
 @scope (.foo) {
   div:scope {
+    --padding: var(--spacing-0);
     font-size: 1rem;
 
     &[data-foo-size='lg'] {
