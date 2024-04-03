@@ -26,15 +26,12 @@ export function camelCase(str: string): string {
 }
 
 // Visit all nodes in the AST and return @scope and rule nodes
-function visit(nodes: Element[]): { type: string; props: string[], children?: Element['children'], parent?: Element['parent'] }[] {
-  let result: { type: string; props: string[], children?: Element['children'], parent?: Element['parent'] }[] = []
+function visit(nodes: Element[]): { type: string; props: string[], value?: string }[] {
+  let result: { type: string; props: string[], value?: string }[] = []
 
   for (const node of nodes) {
-    if (node.type === 'decl' && node.props.startsWith('--')) {
-      result.push({ type: node.type, props: node.props, children: node.children, parent: node.parent })
-    }
     if (['@scope', 'rule'].includes(node.type) && Array.isArray(node.props)) {
-      result.push({ type: node.type, props: node.props })
+      result.push({ type: node.type, props: node.props, value: node.value })
     }
 
     if (Array.isArray(node.children)) {
@@ -66,12 +63,18 @@ export function parseInput(input: string): Components {
 
     // Parse tag and data attributes
     if (node.type === 'rule') {
+      const value = node.value;
       const prop = node.props[0]
       if (prop === undefined || name === undefined) {
         continue
       }
       const component = components[name]
       if (component === undefined) {
+        continue
+      }
+
+      if (value.startsWith('--')) {
+        console.log(node)
         continue
       }
 
@@ -114,11 +117,6 @@ export function parseInput(input: string): Components {
         component.data[attribute] ||= true
         continue
       }
-    }
-
-    if (node.type === 'decl') {
-      console.log(node.parent, node.children);
-      continue
     }
   }
 
