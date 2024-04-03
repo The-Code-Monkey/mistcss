@@ -33,7 +33,7 @@ function visit(nodes: Element[]): { type: string; props: string[] }[] {
 
   for (const node of nodes) {
     console.log(node.type)
-    if (['@scope', 'rule'].includes(node.type) && Array.isArray(node.props)) {
+    if (['@scope', 'rule', 'decl'].includes(node.type) && Array.isArray(node.props)) {
       result.push({ type: node.type, props: node.props })
     }
 
