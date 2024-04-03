@@ -34,7 +34,7 @@ function visit(nodes: Element[]): { type: string; props: string[] }[] {
   for (const node of nodes) {
     console.log(node.type)
     if (['@scope', 'rule', 'decl'].includes(node.type) && Array.isArray(node.props)) {
-      result.push({ type: node.type, props: node.props })
+      result.push({ type: node.type, props: node.props, children: node.type === 'decl' ? node.children : undefined, parent: node.type === 'decl' ? node.parent : undefined })
     }
 
     if (Array.isArray(node.children)) {
