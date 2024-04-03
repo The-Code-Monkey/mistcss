@@ -26,7 +26,7 @@ export function camelCase(str: string): string {
 }
 
 // Visit all nodes in the AST and return @scope and rule nodes
-function visit(nodes: Element[]): { type: string; props: string[] }[] {
+function visit(nodes: Element[]): { type: string; props: string[], children?: Element['children'], parent?: Element['parent'] }[] {
   let result: { type: string; props: string[] }[] = []
 
   console.log(nodes);
