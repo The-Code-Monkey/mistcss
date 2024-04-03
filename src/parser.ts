@@ -29,6 +29,7 @@ export function camelCase(str: string): string {
 function visit(nodes: Element[]): { type: string; props: string[], children?: Element['children'], parent?: Element['parent'] }[] {
   let result: { type: string; props: string[], children?: Element['children'], parent?: Element['parent'] }[] = []
 
+  console.log(nodes)
   for (const node of nodes) {
 
     console.log(node);
