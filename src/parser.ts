@@ -32,8 +32,12 @@ function visit(nodes: Element[]): { type: string; props: string[], value?: strin
   console.log(nodes)
 
   for (const node of nodes) {
-    if (['@scope', 'rule'].includes(node.type) && Array.isArray(node.props)) {
+    if (node.type === 'decl' && node.value.startsWith('--')) {
       result.push({ type: node.type, props: node.props, value: node.value })
+    }
+    
+    if (['@scope', 'rule'].includes(node.type) && Array.isArray(node.props)) {
+      result.push({ type: node.type, props: node.props })
     }
 
     if (Array.isArray(node.children)) {
@@ -63,20 +67,19 @@ export function parseInput(input: string): Components {
       continue
     }
 
+    if (node.type === 'decl') {
+      console.log(node)
+      continue 
+    }
+
     // Parse tag and data attributes
     if (node.type === 'rule') {
-      const value = node.value;
       const prop = node.props[0]
       if (prop === undefined || name === undefined) {
         continue
       }
       const component = components[name]
       if (component === undefined) {
-        continue
-      }
-
-      if (value?.startsWith('--')) {
-        console.log(node)
         continue
       }
 
