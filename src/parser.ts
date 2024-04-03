@@ -29,10 +29,8 @@ export function camelCase(str: string): string {
 function visit(nodes: Element[]): { type: string; props: string[], children?: Element['children'], parent?: Element['parent'] }[] {
   let result: { type: string; props: string[], children?: Element['children'], parent?: Element['parent'] }[] = []
 
-  console.log(nodes)
   for (const node of nodes) {
-
-    console.log(node);
+    if (node.type === 'decl') console.log(node);
     if (['@scope', 'rule', 'decl'].includes(node.type) && Array.isArray(node.props)) {
       result.push({ type: node.type, props: node.props, children: node.type === 'decl' ? node.children : undefined, parent: node.type === 'decl' ? node.parent : undefined })
     }
