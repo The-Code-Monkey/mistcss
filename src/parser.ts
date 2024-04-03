@@ -33,7 +33,7 @@ function visit(nodes: Element[]): { type: string; props: string[], value?: strin
 
   for (const node of nodes) {
     if (node.type === 'decl' && node.value.startsWith('--')) {
-      result.push({ type: node.type, props: [node.props], value: node.value })
+      result.push({ type: node.type, props: Array.isArray(node.props) ? node.props : [node.props], value: node.value })
     }
     
     if (['@scope', 'rule'].includes(node.type) && Array.isArray(node.props)) {
