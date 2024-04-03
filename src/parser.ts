@@ -73,7 +73,7 @@ export function parseInput(input: string): Components {
         continue
       }
 
-      if (value.startsWith('--')) {
+      if (value?.startsWith('--')) {
         console.log(node)
         continue
       }
