@@ -29,11 +29,10 @@ export function camelCase(str: string): string {
 function visit(nodes: Element[]): { type: string; props: string[], value?: string }[] {
   let result: { type: string; props: string[], value?: string }[] = []
 
-  console.log(nodes)
-
   for (const node of nodes) {
     if (node.type === 'decl' && node.value.startsWith('--')) {
       result.push({ type: node.type, props: Array.isArray(node.props) ? node.props : [node.props], value: node.value })
+      continue
     }
     
     if (['@scope', 'rule'].includes(node.type) && Array.isArray(node.props)) {
