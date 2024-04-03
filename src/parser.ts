@@ -30,7 +30,6 @@ function visit(nodes: Element[]): { type: string; props: string[], children?: El
   let result: { type: string; props: string[], children?: Element['children'], parent?: Element['parent'] }[] = []
 
   for (const node of nodes) {
-    console.log(node.type)
     if (['@scope', 'rule', 'decl'].includes(node.type) && Array.isArray(node.props)) {
       result.push({ type: node.type, props: node.props, children: node.type === 'decl' ? node.children : undefined, parent: node.type === 'decl' ? node.parent : undefined })
     }
@@ -115,7 +114,7 @@ export function parseInput(input: string): Components {
     }
 
     if (node.type === 'decl') {
-
+      console.log(node.parent, node.children);
       continue
     }
   }
