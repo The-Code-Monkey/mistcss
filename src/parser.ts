@@ -79,6 +79,10 @@ export function parseInput(input: string): Components {
       if (component === undefined) {
         continue 
       }
+
+      const attribute = camelCase(prop.replace('--', ''))
+
+      component.data[attribute] ||= "string"
       
       continue 
     }
