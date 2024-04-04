@@ -1,11 +1,32 @@
 import { Component, Components } from './parser.js'
 
-function renderProps(component: Component): string {
+const htmlElementCannotHaveChildren = new Set([
+    'area',
+    'base',
+    'br',
+    'col',
+    'embed',
+    'hr',
+    'img',
+    'input',
+    'link',
+    'meta',
+    'param',
+    'source',
+    'track',
+    'wbr',
+    ])
+
+const canElementHaveChildren = (tag: string): boolean => !htmlElementCannotHaveChildren.has(tag)
+
+function renderProps(component: Component, hasChildren: boolean): string {
   return Object.entries({
-    children: 'ReactNode',
+    children: hasChildren ? 'ReactNode' : null,
     ...component.data,
   })
     .map(([key, value]) => {
+        if (!value) return null;
+
         if (Array.isArray(value)) {
             return `${key}?: ${value.map((v) => `'${v}'`).join(' | ')}`
         }
@@ -15,7 +36,7 @@ function renderProps(component: Component): string {
         }
 
         return `${key}?: boolean`
-    })
+    }).filter((prop) => prop !== null)
     .map((line) => `  ${line}`)
     .join('\n')
 }
@@ -29,15 +50,17 @@ function renderComponent(components: Components, name: string): string {
   const variables = Object.keys(component.data).filter(key => key.startsWith('--'));
   const hasVariables = variables.length > 0;
 
+  const hasChildren = canElementHaveChildren(component.tag)
+
   return `type ${name}Props = {
-${renderProps(component)}
+${renderProps(component, hasChildren)}
 } & JSX.IntrinsicElements['${component.tag}']
 
 export function ${name}({ ${[
-    'children',
+      hasChildren ? 'children' : null,
     ...Object.keys(component.data).map(key => key.startsWith('--') ? key.replace('--', '') : key),
     '...props',
-  ].join(', ')} }: ${name}Props) {
+  ].filter(prop => prop !== null).join(', ')} }: ${name}Props) {
   return (
     <${[
       component.tag,
@@ -52,9 +75,9 @@ export function ${name}({ ${[
           .join(',\r\n\t\t\t')}
         }}` : null,
     ].filter(item => item !== null).join("\r\n\t\t")}
-    >
+    ${hasChildren ? `>
       {children}
-    </${component.tag}>
+    </${component.tag}>` : '/>'}
   )
 }
 `
