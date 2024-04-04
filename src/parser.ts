@@ -5,7 +5,7 @@ export type Components = Record<string, Component>
 
 export interface Component {
   tag: string
-  data: Record<string, string[] | boolean>
+  data: Record<string, string | string[] | boolean>
   className: string
 }
 
@@ -34,7 +34,7 @@ function visit(nodes: Element[]): { type: string; props: string[], value?: strin
       result.push({ type: node.type, props: Array.isArray(node.props) ? node.props : [node.props], value: node.value })
       continue
     }
-    
+
     if (['@scope', 'rule'].includes(node.type) && Array.isArray(node.props)) {
       result.push({ type: node.type, props: node.props })
     }
@@ -67,8 +67,8 @@ export function parseInput(input: string): Components {
     }
 
     if (node.type === 'decl') {
-      console.log(node);
       const prop = node.props[0]
+      const prefix = node.value?.split(':var(')[1]?.replace(');', '')
 
       if (prop === undefined || name === undefined) {
         continue
@@ -77,14 +77,16 @@ export function parseInput(input: string): Components {
       const component = components[name]
 
       if (component === undefined) {
-        continue 
+        continue
       }
 
-      const attribute = camelCase(prop.replace('--', ''))
+      component.data[prop] ||= "string"
 
-      component.data[attribute] ||= "string"
-      
-      continue 
+      if (prefix) {
+        component.data[prop] = `string:${prefix.split(/(?<!-)(?=-[a-zA-Z0-9])/g)[0]}`
+      }
+
+      continue
     }
 
     // Parse tag and data attributes
