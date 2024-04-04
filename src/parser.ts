@@ -69,6 +69,10 @@ export function parseInput(input: string): Components {
     if (node.type === 'decl') {
       console.log(node);
 
+      if (prop === undefined || name === undefined) {
+        continue
+      }
+
       const component = components[name]
 
       if (component === undefined) {
