@@ -1,3 +1,6 @@
+import fs from 'node:fs'
+import path from 'node:path';
+
 import { Component, Components } from './parser.js'
 
 const htmlElementCannotHaveChildren = new Set([
@@ -50,34 +53,43 @@ function renderComponent(components: Components, name: string): string {
   const variables = Object.keys(component.data).filter(key => key.startsWith('--'));
   const hasVariables = variables.length > 0;
 
-  const hasChildren = canElementHaveChildren(component.tag)
+  const hasChildren = canElementHaveChildren(component.tag);
+  const hasTemplate = fs.existsSync(path.join(process.cwd(), 'template.txt'));
+
+  const elementProps = `
+      ${[
+      '{...props}',
+      `className="${component.className}"`,
+      ...Object.keys(component.data).filter(key => !key.startsWith('--')).map((key) => `data-${key}={${key}}`),
+        hasVariables ? `style={{
+            ${variables.map(key =>
+            (component.data[key] as string)?.includes(':') ?
+                `["${key}" as string]: \`\${${key.replace('--', '')}.includes("var(--") ? \`\${${key.replace('--', '')}}\` : \`${(component.data[key] as string).split(':')[1]}-\${${key.replace('--', '')}}\`}\``
+                : `["${key}" as string]: \`\${${key.replace('--', '')}}\``)
+            .join(',\t\t\r\n')}
+        }}` : null,
+].filter(item => item !== null).join("\r\n")}
+`;
+
+  const propBreakdown = `${[
+      hasChildren ? 'children' : null,
+      ...Object.keys(component.data).map(key => key.startsWith('--') ? key.replace('--', '') : key),
+      '...props',
+  ].filter(prop => prop !== null).join(', ')}`
+
+  if (hasTemplate) {
+      const template = fs.readFileSync(path.join(process.cwd(), 'template.txt'), 'utf-8');
+
+      return template.replace(/{{componentName}}/g, name).replace(/{{elementName}}/g, component.tag).replace(/{{elementProps}}/g, elementProps).replace(/{{propBreakdown}}/g, propBreakdown).replace(/{{typeInterface}}/g, renderProps(component, hasChildren));
+  }
 
   return `type ${name}Props = {
 ${renderProps(component, hasChildren)}
 } & JSX.IntrinsicElements['${component.tag}']
 
-export function ${name}({ ${[
-      hasChildren ? 'children' : null,
-    ...Object.keys(component.data).map(key => key.startsWith('--') ? key.replace('--', '') : key),
-    '...props',
-  ].filter(prop => prop !== null).join(', ')} }: ${name}Props) {
+export function ${name}({ ${propBreakdown} }: ${name}Props) {
   return (
-    <${[
-      component.tag,
-      '{...props}',
-      `className="${component.className}"`,
-      ...Object.keys(component.data).filter(key => !key.startsWith('--')).map((key) => `data-${key}={${key}}`),
-      hasVariables ? `style={{
-            ${variables.map(key => 
-          (component.data[key] as string)?.includes(':') ? 
-              `["${key}" as string]: \`\${${key.replace('--', '')}.includes("var(--") ? \`\${${key.replace('--', '')}}\` : \`${(component.data[key] as string).split(':')[1]}-\${${key.replace('--', '')}}\`}\`` 
-              : `["${key}" as string]: \`\${${key.replace('--', '')}}\``)
-          .join(',\r\n\t\t\t')}
-        }}` : null,
-    ].filter(item => item !== null).join("\r\n\t\t")}
-    ${hasChildren ? `>
-      {children}
-    </${component.tag}>` : '/>'}
+    <${component.tag} ${elementProps} ${hasChildren ? `>{children}</${component.tag}>` : '/>'}
   )
 }
 `

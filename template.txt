@@ -1,0 +1,14 @@
+import type { JSX, ReactNode } from 'react';
+
+export interface {{componentName}}Props extends JSX.IntrinsicElements["{{elementName}}"] {
+    children?: ReactNode;
+    {{typeInterface}}
+}
+
+export const {{componentName}} = ({{propBreakdown}}: {{componentName}}Props) => {
+    return (
+        <{{elementName}} {{elementProps}}>
+            {children}
+        </{{elementName}}>
+    );
+};
