@@ -20,12 +20,12 @@ export function Foo({ children, background, padding, bgColor, border, testTest, 
 	  data-fooSize={fooSize}
 	  data-x={x}
 	  style={{
-        ["--background" as string]: `${background?.includes("var(--") ? `${background}` : `--color-${String(background)}`}`,
-		["--padding" as string]: `${padding?.includes("var(--") ? `${padding}` : `--spacing-${String(padding)}`}`,
-		["--bg-color" as string]: `${bgColor?.includes("var(--") ? `${bgColor}` : `--radius-${String(bgColor)}`}`,
-		["--border" as string]: `${border}`,
-		["--test-test" as string]: `${testTest}`
-      }}
+		["--background" as string]: `--color-${background}` ? `--color-${background}` : "unset",
+		["--padding" as string]: `--spacing-${padding}` ? `--spacing-${padding}` : "unset",
+		["--bg-color" as string]: `--radius-${bgColor}` ? `--radius-${bgColor}` : "unset",
+		["--border" as string]: border ? border : "unset",
+		["--test-test" as string]: testTest ? testTest : "unset"
+	}}
     >
       {children}
     </div>

@@ -38,11 +38,23 @@ function renderComponent(components: Components, name: string): string {
     '...props',
   ].filter(prop => prop !== null).join(', ');
 
-  const style = hasVariables ? `style={{
-        ${variables.map(key => (component.data[key] as string)?.includes(':') ?
-      `["${key}" as string]: \`\${${camelCase(key.replace('--', ''))}?.includes("var(--") ? \`\${${camelCase(key.replace('--', ''))}}\` : \`${(component.data[key] as string).split(':')[1]}-\${String(${camelCase(key.replace('--', ''))})}\`}\``
-      : `["${key}" as string]: \`\${${camelCase(key.replace('--', ''))}}\``).join(',\r\n\t\t')}
-      }}` : null;
+  // Map function to process each variable
+  const processVariables = variables.map(key => {
+    const propName = `["${key}" as string]`;
+    const propValue = camelCase(key.replace('--', ''));
+    const dataValue = component.data[key] as string;
+
+    // Check if dataValue includes ':' and process accordingly
+    if (dataValue?.includes(':')) {
+      const processedValue = propValue.includes("var(--") ? propValue : `${dataValue.split(':')[1]}-\${${String(propValue)}}`;
+      return `${propName}: \`${processedValue}\` ? \`${processedValue}\` : "unset"`;
+    } else {
+      return `${propName}: ${propValue} ? ${propValue} : "unset"`;
+    }
+  }).join(',\r\n\t\t');
+
+// Construct the style string
+const style = hasVariables ? `style={{\r\n\t\t${processVariables}\r\n\t}}` : null;
 
   const tagProps = [
     component.tag,
