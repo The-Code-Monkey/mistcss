@@ -6,30 +6,29 @@ import type { JSX, ReactNode } from 'react'
 import type { JSX, ReactNode } from 'react';
 
 export interface FooProps extends JSX.IntrinsicElements["div"] {
-    children?: ReactNode;
-      children?: ReactNode
-  background?: string
-  padding?: string
-  border?: string
-  test?: string
-  fooSize?: 'lg' | 'sm'
-  x?: boolean
+    children?: ReactNode
+    background?: string
+    padding?: string
+    border?: string
+    test?: string
+    fooSize?: 'lg' | 'sm'
+    x?: boolean
 }
 
 export const Foo = (children, background, padding, border, test, fooSize, x, ...props: FooProps) => {
     return (
         <div 
-      {...props}
-className="foo"
-data-fooSize={fooSize}
-data-x={x}
-style={{
-            ["--background" as string]: `${background.includes("var(--") ? `${background}` : `--color-${background}`}`,		
-["--padding" as string]: `${padding.includes("var(--") ? `${padding}` : `--spacing-${padding}`}`,		
-["--border" as string]: `${border}`,		
-["--test" as string]: `${test}`
-        }}
->
+            {...props}
+            className="foo"
+            data-fooSize={fooSize}
+            data-x={x}
+            style={{
+      ["--background" as string]: `${background.includes("var(--") ? `${background}` : `--color-${background}`}`,
+              ["--padding" as string]: `${padding.includes("var(--") ? `${padding}` : `--spacing-${padding}`}`,
+              ["--border" as string]: `${border}`,
+              ["--test" as string]: `${test}`
+    }}
+        >
             {children}
         </div>
     );
@@ -38,20 +37,19 @@ style={{
 import type { JSX, ReactNode } from 'react';
 
 export interface BarProps extends JSX.IntrinsicElements["span"] {
-    children?: ReactNode;
-      children?: ReactNode
-  barSize?: 'lg'
-  x?: boolean
+    children?: ReactNode
+    barSize?: 'lg'
+    x?: boolean
 }
 
 export const Bar = (children, barSize, x, ...props: BarProps) => {
     return (
         <span 
-      {...props}
-className="bar"
-data-barSize={barSize}
-data-x={x}
->
+            {...props}
+            className="bar"
+            data-barSize={barSize}
+            data-x={x}
+        >
             {children}
         </span>
     );
@@ -60,16 +58,15 @@ data-x={x}
 import type { JSX, ReactNode } from 'react';
 
 export interface BazProps extends JSX.IntrinsicElements["p"] {
-    children?: ReactNode;
-      children?: ReactNode
+    children?: ReactNode
 }
 
 export const Baz = (children, ...props: BazProps) => {
     return (
         <p 
-      {...props}
-className="baz"
->
+            {...props}
+            className="baz"
+        >
             {children}
         </p>
     );

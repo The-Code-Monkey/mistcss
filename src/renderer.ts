@@ -40,8 +40,8 @@ function renderProps(component: Component, hasChildren: boolean): string {
 
         return `${key}?: boolean`
     }).filter((prop) => prop !== null)
-    .map((line) => `  ${line}`)
-    .join('\n')
+    // .map((line) => `  ${line}`)
+    .join('\r\n    ')
 }
 
 function renderComponent(components: Components, name: string): string {
@@ -56,20 +56,20 @@ function renderComponent(components: Components, name: string): string {
   const hasChildren = canElementHaveChildren(component.tag);
   const hasTemplate = fs.existsSync(path.join(process.cwd(), 'template.txt'));
 
-  const elementProps = `
-      ${[
-      '{...props}',
-      `className="${component.className}"`,
-      ...Object.keys(component.data).filter(key => !key.startsWith('--')).map((key) => `data-${key}={${key}}`),
-        hasVariables ? `style={{
-            ${variables.map(key =>
-            (component.data[key] as string)?.includes(':') ?
-                `["${key}" as string]: \`\${${key.replace('--', '')}.includes("var(--") ? \`\${${key.replace('--', '')}}\` : \`${(component.data[key] as string).split(':')[1]}-\${${key.replace('--', '')}}\`}\``
-                : `["${key}" as string]: \`\${${key.replace('--', '')}}\``)
-            .join(',\t\t\r\n')}
-        }}` : null,
-].filter(item => item !== null).join("\r\n")}
-`;
+  const elementPropArray = ['', '{...props}', `className="${component.className}"`, ...Object.keys(component.data).filter(key => !key.startsWith('--')).map((key) => `data-${key}={${key}}`)];
+
+  if (hasVariables) {
+      elementPropArray.push(`style={{
+      ${variables.map(key =>
+          (component.data[key] as string)?.includes(':') ?
+              `["${key}" as string]: \`\${${key.replace('--', '')}.includes("var(--") ? \`\${${key.replace('--', '')}}\` : \`${(component.data[key] as string).split(':')[1]}-\${${key.replace('--', '')}}\`}\``
+              : `["${key}" as string]: \`\${${key.replace('--', '')}}\``)
+          .join(',\r\n')}
+    }}`)
+  }
+
+
+    const elementProps = elementPropArray.join("\r\n            ");
 
   const propBreakdown = `${[
       hasChildren ? 'children' : null,
@@ -79,6 +79,8 @@ function renderComponent(components: Components, name: string): string {
 
   if (hasTemplate) {
       const template = fs.readFileSync(path.join(process.cwd(), 'template.txt'), 'utf-8');
+
+      console.log(template.replace(/{{componentName}}/g, name).replace(/{{elementName}}/g, component.tag).replace(/{{elementProps}}/g, elementProps).replace(/{{propBreakdown}}/g, propBreakdown).replace(/{{typeInterface}}/g, renderProps(component, hasChildren)))
 
       return template.replace(/{{componentName}}/g, name).replace(/{{elementName}}/g, component.tag).replace(/{{elementProps}}/g, elementProps).replace(/{{propBreakdown}}/g, propBreakdown).replace(/{{typeInterface}}/g, renderProps(component, hasChildren));
   }
