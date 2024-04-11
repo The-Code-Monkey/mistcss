@@ -7,12 +7,12 @@ type FooProps = {
   padding?: string;
   bgColor?: string;
   border?: string;
-  test?: string;
+  testTest?: string;
   fooSize?: 'lg' | 'sm';
   x?: boolean;
 } & JSX.IntrinsicElements['div']
 
-export function Foo({ children, background, padding, bgColor, border, test, fooSize, x, ...props }: FooProps) {
+export function Foo({ children, background, padding, bgColor, border, testTest, fooSize, x, ...props }: FooProps) {
   return (
     <div
 	  {...props}
@@ -24,7 +24,7 @@ export function Foo({ children, background, padding, bgColor, border, test, fooS
 		["--padding" as string]: `${padding?.includes("var(--") ? `${padding}` : `--spacing-${String(padding)}`}`,
 		["--bg-color" as string]: `${bgColor?.includes("var(--") ? `${bgColor}` : `--radius-${String(bgColor)}`}`,
 		["--border" as string]: `${border}`,
-		["--test" as string]: `${test}`
+		["--test-test" as string]: `${testTest}`
       }}
     >
       {children}

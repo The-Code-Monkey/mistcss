@@ -41,7 +41,7 @@ function renderComponent(components: Components, name: string): string {
   const style = hasVariables ? `style={{
         ${variables.map(key => (component.data[key] as string)?.includes(':') ?
       `["${key}" as string]: \`\${${camelCase(key.replace('--', ''))}?.includes("var(--") ? \`\${${camelCase(key.replace('--', ''))}}\` : \`${(component.data[key] as string).split(':')[1]}-\${String(${camelCase(key.replace('--', ''))})}\`}\``
-      : `["${key}" as string]: \`\${${key.replace('--', '')}}\``).join(',\r\n\t\t')}
+      : `["${key}" as string]: \`\${${camelCase(key.replace('--', ''))}}\``).join(',\r\n\t\t')}
       }}` : null;
 
   const tagProps = [
