@@ -24,9 +24,9 @@ export const Foo = (children, background, padding, border, test, fooSize, x, ...
             data-x={x}
             style={{
       ["--background" as string]: `${background.includes("var(--") ? `${background}` : `--color-${background}`}`,
-              ["--padding" as string]: `${padding.includes("var(--") ? `${padding}` : `--spacing-${padding}`}`,
-              ["--border" as string]: `${border}`,
-              ["--test" as string]: `${test}`
+["--padding" as string]: `${padding.includes("var(--") ? `${padding}` : `--spacing-${padding}`}`,
+["--border" as string]: `${border}`,
+["--test" as string]: `${test}`
     }}
         >
             {children}
