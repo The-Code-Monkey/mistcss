@@ -2,7 +2,8 @@ import assert from 'node:assert'
 import fs from 'node:fs'
 import test from 'node:test'
 
-import {camelCase, type Components, parseInput, pascalCase} from './parser.js'
+import { type Components, parseInput} from './parser.js'
+import {camelCase, pascalCase} from "./utils.js";
 
 // Fixtures
 const mistCSS: string = fs.readFileSync('fixtures/Foo.mist.css', 'utf-8')
