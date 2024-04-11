@@ -1,4 +1,5 @@
 import { Component, Components } from './parser.js'
+import {pascalCase} from "./utils.js";
 
 const htmlElementCannotHaveChildren = new Set([
     'area',
@@ -32,7 +33,7 @@ function renderProps(component: Component, hasChildren: boolean): string {
         }
 
         if (typeof value === "string") {
-            return `${key.startsWith('--') ? key.replace('--', '') : key}?: ${value.split(':')[0]}`
+            return `${pascalCase(key.startsWith('--') ? key.replace('--', '') : key)}?: ${value.split(':')[0]}`
         }
 
         return `${key}?: boolean`

@@ -1,5 +1,7 @@
 import { compile, Element } from 'stylis'
 
+import {camelCase, pascalCase} from "./utils.js";
+
 // Components in a MistCSS file
 export type Components = Record<string, Component>
 
@@ -12,18 +14,6 @@ export interface Component {
 const enumDataAttributeRegex =
   /\[data-(?<attribute>[a-z-]+)=('|")(?<value>[^']*)('|")\]/g
 const booleanDataAttributeRegex = /\[data-(?<attribute>[a-z-]+)(?=\])/g
-
-const pascalCaseRegex = /(?:^|-)([a-z])/g
-
-export function pascalCase(str: string): string {
-  return str.replace(pascalCaseRegex, (_, g: string) => g.toUpperCase())
-}
-
-const camelCaseRegex = /-([a-z])/g
-
-export function camelCase(str: string): string {
-  return str.replace(camelCaseRegex, (g) => g[1]?.toUpperCase() ?? '')
-}
 
 // Visit all nodes in the AST and return @scope and rule nodes
 function visit(nodes: Element[]): { type: string; props: string[], value?: string }[] {
