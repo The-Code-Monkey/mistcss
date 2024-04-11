@@ -59,7 +59,7 @@ ${renderProps(component, hasChildren)}
 
 export function ${name}({ ${[
       hasChildren ? 'children' : null,
-    ...Object.keys(component.data).map(key => key.startsWith('--') ? key.replace('--', '') : key),
+    ...Object.keys(component.data).map(key => camelCase(key.startsWith('--') ? key.replace('--', '') : key)),
     '...props',
   ].filter(prop => prop !== null).join(', ')} }: ${name}Props) {
   return (
