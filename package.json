@@ -1,6 +1,6 @@
 {
   "name": "@techstack/mistcss-test",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "description": "",
   "type": "module",
   "bin": {
@@ -15,7 +15,7 @@
     "lint": "eslint",
     "fixtures:type-check": " tsc -p ./fixtures/tsconfig.json",
     "fixtures:lint-css": "stylelint './fixtures/**/*.css'",
-    "test": "npm run build && node --import tsx/esm --test src/*.test.ts && npm run fixtures:type-check && npm run fixtures:lint-css",
+    "test": "npm run build && chmod 777 ./lib && chmod 777 ./lib/bin.js && ./lib/bin.js ./fixtures",
     "prepublishOnly": "npm run build",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",

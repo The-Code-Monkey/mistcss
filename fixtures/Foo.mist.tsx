@@ -4,16 +4,17 @@ import './Foo.mist.css'
 import type { JSX, ReactNode } from 'react'
 
 type FooProps = {
-  children?: ReactNode
-  background?: string
-  padding?: string
-  border?: string
-  test?: string
-  fooSize?: 'lg' | 'sm'
-  x?: boolean
+  children?: ReactNode;
+  background?: string;
+  padding?: string;
+  bgColor?: string;
+  border?: string;
+  test?: string;
+  fooSize?: 'lg' | 'sm';
+  x?: boolean;
 } & JSX.IntrinsicElements['div']
 
-export function Foo({ children, background, padding, border, test, fooSize, x, ...props }: FooProps) {
+export function Foo({ children, background, padding, bgColor, border, test, fooSize, x, ...props }: FooProps) {
   return (
     <div
 		{...props}
@@ -21,8 +22,9 @@ export function Foo({ children, background, padding, border, test, fooSize, x, .
 		data-fooSize={fooSize}
 		data-x={x}
 		style={{
-            ["--background" as string]: `${background.includes("var(--") ? `${background}` : `--color-${background}`}`,
-			["--padding" as string]: `${padding.includes("var(--") ? `${padding}` : `--spacing-${padding}`}`,
+            ["--background" as string]: undefined `${background.includes("var(--") ? `${background}` : `--color-${background}`}`,
+			["--padding" as string]: undefined `${padding.includes("var(--") ? `${padding}` : `--spacing-${padding}`}`,
+			["--bg-color" as string]: undefined `${bgColor.includes("var(--") ? `${bgColor}` : `--radius-${bgColor}`}`,
 			["--border" as string]: `${border}`,
 			["--test" as string]: `${test}`
         }}
@@ -33,9 +35,9 @@ export function Foo({ children, background, padding, border, test, fooSize, x, .
 }
 
 type BarProps = {
-  children?: ReactNode
-  barSize?: 'lg'
-  x?: boolean
+  children?: ReactNode;
+  barSize?: 'lg';
+  x?: boolean;
 } & JSX.IntrinsicElements['span']
 
 export function Bar({ children, barSize, x, ...props }: BarProps) {
@@ -52,7 +54,7 @@ export function Bar({ children, barSize, x, ...props }: BarProps) {
 }
 
 type BazProps = {
-  children?: ReactNode
+  children?: ReactNode;
 } & JSX.IntrinsicElements['p']
 
 export function Baz({ children, ...props }: BazProps) {

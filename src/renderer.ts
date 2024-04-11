@@ -38,7 +38,7 @@ function renderProps(component: Component, hasChildren: boolean): string {
 
         return `${key}?: boolean`
     }).filter((prop) => prop !== null)
-    .map((line) => `  ${line}`)
+    .map((line) => `  ${line};`)
     .join('\n')
 }
 
@@ -71,7 +71,7 @@ export function ${name}({ ${[
       hasVariables ? `style={{
             ${variables.map(key => 
           (component.data[key] as string)?.includes(':') ? 
-              `["${key}" as string]: \`\${${key.replace('--', '')}.includes("var(--") ? \`\${${key.replace('--', '')}}\` : \`${(component.data[key] as string).split(':')[1]}-\${${key.replace('--', '')}}\`}\`` 
+              `["${key}" as string]: ${console.log(component.data[key])} \`\${${camelCase(key.replace('--', ''))}.includes("var(--") ? \`\${${camelCase(key.replace('--', ''))}}\` : \`${(component.data[key] as string).split(':')[1]}-\${${camelCase(key.replace('--', ''))}}\`}\`` 
               : `["${key}" as string]: \`\${${key.replace('--', '')}}\``)
           .join(',\r\n\t\t\t')}
         }}` : null,
