@@ -47,9 +47,9 @@ function renderComponent(components: Components, name: string): string {
     // Check if dataValue includes ':' and process accordingly
     if (dataValue?.includes(':')) {
       const processedValue = propValue.includes("var(--") ? propValue : `${dataValue.split(':')[1]}-\${${String(propValue)}}`;
-      return `${propName}: ${propValue} ? \`${processedValue}\` : "unset"`;
+      return `${propName}: ${propValue} ? \`${processedValue}\` : undefined`;
     } else {
-      return `${propName}: ${propValue} ? ${propValue} : "unset"`;
+      return `${propName}: ${propValue} ? ${propValue} : undefined`;
     }
   }).join(',\r\n\t\t');
 

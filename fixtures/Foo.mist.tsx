@@ -20,11 +20,11 @@ export function Foo({ children, background, padding, bgColor, border, testTest, 
 	  data-fooSize={fooSize}
 	  data-x={x}
 	  style={{
-		["--background" as string]: background ? `--color-${background}` : "unset",
-		["--padding" as string]: padding ? `--spacing-${padding}` : "unset",
-		["--bg-color" as string]: bgColor ? `--radius-${bgColor}` : "unset",
-		["--border" as string]: border ? border : "unset",
-		["--test-test" as string]: testTest ? testTest : "unset"
+		["--background" as string]: background ? `--color-${background}` : undefined,
+		["--padding" as string]: padding ? `--spacing-${padding}` : undefined,
+		["--bg-color" as string]: bgColor ? `--radius-${bgColor}` : undefined,
+		["--border" as string]: border ? border : undefined,
+		["--test-test" as string]: testTest ? testTest : undefined
 	}}
     >
       {children}
