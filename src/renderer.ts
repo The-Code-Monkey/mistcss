@@ -61,7 +61,6 @@ const processVariable = <Type extends string | string[]>(key: string, component:
         const innerValue = component.data[value];
         if (innerValue) {
           const innerVariable = processVariable(value, component);
-          console.log(innerVariable.dataValue)
           dataValue = innerVariable.dataValue;
         }
       }
