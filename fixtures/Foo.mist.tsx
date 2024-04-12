@@ -18,11 +18,12 @@ type FooProps = {
   borderWidth?: string;
   borderStyle?: string;
   border?: string;
+  color?: string;
   fooSize?: 'lg' | 'sm';
   x?: boolean;
 } & JSX.IntrinsicElements['div']
 
-export function Foo({ children, background, bgColor, testTest, p, pl, pr, pb, pt, py, px, padding, borderColor, borderWidth, borderStyle, border, fooSize, x, ...props }: FooProps) {
+export function Foo({ children, background, bgColor, testTest, p, pl, pr, pb, pt, py, px, padding, borderColor, borderWidth, borderStyle, border, color, fooSize, x, ...props }: FooProps) {
   return (
     <div
 	  {...props}
@@ -44,7 +45,8 @@ export function Foo({ children, background, bgColor, testTest, p, pl, pr, pb, pt
 		["--border-color" as string]: borderColor ? `var(--color-${borderColor})` : undefined,
 		["--border-width" as string]: borderWidth ? `var(--spacing-${borderWidth})` : undefined,
 		["--border-style" as string]: borderStyle ? `var(--borderStyle-${borderStyle})` : undefined,
-		["--border" as string]: border ? border : undefined
+		["--border" as string]: border ? border : undefined,
+		["--color" as string]: color ? `var(--color-${color})` : undefined
 	}}
     >
       {children}

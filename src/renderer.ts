@@ -56,10 +56,12 @@ const processVariable = <Type extends string | string[]>(key: string, component:
       dataValue = value;
     } else {
       const value = dataValue.split(':')[1];
-      if (value) {
+
+      if (value && key !== value) {
         const innerValue = component.data[value];
         if (innerValue) {
           const innerVariable = processVariable(value, component);
+          console.log(innerVariable.dataValue)
           dataValue = innerVariable.dataValue;
         }
       }
