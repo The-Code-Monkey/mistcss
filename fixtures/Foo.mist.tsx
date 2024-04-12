@@ -4,15 +4,22 @@ import type { JSX, ReactNode } from 'react'
 type FooProps = {
   children?: ReactNode;
   background?: string;
-  padding?: string;
   bgColor?: string;
   border?: string;
   testTest?: string;
+  p?: string;
+  pl?: string;
+  pr?: string;
+  pb?: string;
+  pt?: string;
+  py?: string;
+  px?: string;
+  padding?: string;
   fooSize?: 'lg' | 'sm';
   x?: boolean;
 } & JSX.IntrinsicElements['div']
 
-export function Foo({ children, background, padding, bgColor, border, testTest, fooSize, x, ...props }: FooProps) {
+export function Foo({ children, background, bgColor, border, testTest, p, pl, pr, pb, pt, py, px, padding, fooSize, x, ...props }: FooProps) {
   return (
     <div
 	  {...props}
@@ -21,10 +28,17 @@ export function Foo({ children, background, padding, bgColor, border, testTest, 
 	  data-x={x}
 	  style={{
 		["--background" as string]: background ? `var(--color-${background})` : undefined,
-		["--padding" as string]: padding ? `var(--spacing-${padding})` : undefined,
-		["--bg-color" as string]: bgColor ? `var(--radius-${bgColor})` : undefined,
+		["--bg-color" as string]: bgColor ? `var(--color-${bgColor})` : undefined,
 		["--border" as string]: border ? border : undefined,
-		["--test-test" as string]: testTest ? testTest : undefined
+		["--test-test" as string]: testTest ? testTest : undefined,
+		["--p" as string]: p ? `var(--spacing-${p})` : undefined,
+		["--pl" as string]: pl ? `var(--spacing-${pl})` : undefined,
+		["--pr" as string]: pr ? `var(--spacing-${pr})` : undefined,
+		["--pb" as string]: pb ? `var(--spacing-${pb})` : undefined,
+		["--pt" as string]: pt ? `var(--spacing-${pt})` : undefined,
+		["--py" as string]: py ? `var(--spacing-${py})` : undefined,
+		["--px" as string]: px ? `var(--spacing-${px})` : undefined,
+		["--padding" as string]: padding ? `var(--spacing-${padding})` : undefined
 	}}
     >
       {children}

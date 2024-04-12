@@ -1,4 +1,4 @@
-import { Component, Components } from './parser.js'
+import {Component, Components} from './parser.js'
 import {camelCase} from "./utils.js";
 
 const htmlElementCannotHaveChildren = new Set([
@@ -13,15 +13,75 @@ function renderProps(component: Component, hasChildren: boolean): string {
     ...component.data,
   };
 
-  return Object.entries(props)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .filter(([_, value]) => value)
+  // @ts-expect-error unused variable
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const keys = Object.keys(props);
+  const entries = Object.entries(props) .filter((prop) => prop[1]);
+
+  return entries
     .map(([key, value]) => {
       const propName = camelCase(key.startsWith('--') ? key.replace('--', '') : key);
       const propType = Array.isArray(value) ? value.map((v) => `'${v}'`).join(' | ') : typeof value === "string" ? value.split(':')[0] : 'boolean';
+
       return `  ${propName}?: ${propType};`;
     })
     .join('\n');
+}
+
+const processVariable = <Type extends string | string[]>(key: string, component: Component): {
+    propName: string;
+    propValue: string;
+    dataValue: Type;
+} => {
+  const propName = `["${key}" as string]`;
+  const propValue = camelCase(key.replace('--', ''));
+  let dataValue: string | string[] = component.data[key] as string | string[];
+
+  if (typeof dataValue === 'string') {
+    if (dataValue.split(',').length > 1) {
+      const value = dataValue.split(',');
+      for (let i = 0; i < value.length; i++) {
+        if (value[i]?.includes(':')) {
+          const innerValue = value[i]?.split(':')[1];
+          if (innerValue) {
+            const innerVariable = processVariable<string>(innerValue, component);
+            value[i] = innerVariable.dataValue;
+          }
+        } else {
+          const innerVariable = processVariable<string>(String(value[i]), component);
+          value[i] = innerVariable.dataValue;
+        }
+      }
+
+      dataValue = value;
+    } else {
+      const value = dataValue.split(':')[1];
+      if (value) {
+        const innerValue = component.data[value];
+        if (innerValue) {
+          const innerVariable = processVariable(value, component);
+          dataValue = innerVariable.dataValue;
+        }
+      }
+    }
+  }
+
+  return {
+    propName,
+    propValue,
+    dataValue: dataValue as Type
+  };
+}
+
+function checkArrayElements(arr: (string | string[])[]) {
+  const allEqual = arr.every((val: string | string[]): boolean  => {
+    if (Array.isArray(val)) {
+      return checkArrayElements(val) === val[0];
+    } else {
+        return val === arr[0];
+    }
+  });
+  return allEqual ? Array.isArray(arr[0]) ? arr[0][0] : arr[0] : arr;
 }
 
 function renderComponent(components: Components, name: string): string {
@@ -40,9 +100,24 @@ function renderComponent(components: Components, name: string): string {
 
   // Map function to process each variable
   const processVariables = variables.map(key => {
-    const propName = `["${key}" as string]`;
-    const propValue = camelCase(key.replace('--', ''));
-    const dataValue = component.data[key] as string;
+    const { propName, propValue, dataValue } = processVariable(key, component);
+
+
+    if (Array.isArray(dataValue)) {
+      const convertArray = checkArrayElements(dataValue);
+
+      if (typeof convertArray === 'string') {
+        return `${propName}: ${propValue} ? \`${propValue.includes("var(--") ? propValue : `var(${convertArray.split(':')[1]}-\${${String(propValue)}})`}\` : undefined`;
+      }
+
+      return `${propName}: ${propValue} ? \`${dataValue.map((val: string | string[]) => {
+        const innerVal = (v: string) => `var(${v.split(':')[1]}-\${${String(propValue)}})`;
+        if (typeof val !== 'string') {
+          return propValue.includes("var(--") ? propValue : val.map((v: string) => innerVal(String(v))).join(' ');
+        }
+        return propValue.includes("var(--") ? propValue : innerVal(String(val));
+      }).join(' ')}\` : undefined`;
+    }
 
     // Check if dataValue includes ':' and process accordingly
     if (dataValue?.includes(':')) {

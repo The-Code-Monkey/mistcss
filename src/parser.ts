@@ -58,7 +58,7 @@ export function parseInput(input: string): Components {
 
     if (node.type === 'decl') {
       const prop = node.props[0]
-      const prefix = node.value?.split(':var(')[1]?.replace(');', '')
+      const value = node.value?.split(':')[1]?.split(' ');
 
       if (prop === undefined || name === undefined) {
         continue
@@ -70,10 +70,26 @@ export function parseInput(input: string): Components {
         continue
       }
 
-      component.data[prop] ||= "string"
+      if (value && value.length > 1) {
+        const prefixes = [];
 
-      if (prefix) {
-        component.data[prop] = `string:${prefix.split(/(?<!-)(?=-[a-zA-Z0-9])/g)[0]}`
+        for (const val of value) {
+            const prefix = val.split('var(')[1]?.replace(')', '').replace(';', '')
+            if (prefix) {
+              prefixes.push(prefix)
+            }
+        }
+
+        component.data[prop] = 'string:' + prefixes.join(',')
+
+      } else {
+        const prefix = node.value?.split(':var(')[1]?.replace(');', '')
+
+        component.data[prop] ||= "string"
+
+        if (prefix) {
+          component.data[prop] = `string:${prefix.split(/(?<!-)(?=-[a-zA-Z0-9])/g)[0]}`
+        }
       }
 
       continue
