@@ -2,7 +2,6 @@
   div:scope {
     --background: var(--color-black);
     --bg-color: var(--background);
-    --border: 1;
     --test-test: true;
     --p: var(--spacing-0);
     --pl: var(--p);
@@ -12,9 +11,14 @@
     --py: var(--pt) var(--pb);
     --px: var(--pl) var(--pr);
     --padding: var(--py) var(--px);
+    --border-color: var(--color-black);
+    --border-width: var(--spacing-px);
+    --border-style: var(--borderStyle-solid);
+    --border: var(--border-width) var(--border-style) var(--border-color);
 
     font-size: 1rem;
     padding: var(--padding);
+    border: var(--border);
 
     &[data-foo-size='lg'] {
       font-size: 1.5rem;

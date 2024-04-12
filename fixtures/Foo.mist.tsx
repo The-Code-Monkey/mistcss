@@ -5,7 +5,6 @@ type FooProps = {
   children?: ReactNode;
   background?: string;
   bgColor?: string;
-  border?: string;
   testTest?: string;
   p?: string;
   pl?: string;
@@ -15,11 +14,15 @@ type FooProps = {
   py?: string;
   px?: string;
   padding?: string;
+  borderColor?: string;
+  borderWidth?: string;
+  borderStyle?: string;
+  border?: string;
   fooSize?: 'lg' | 'sm';
   x?: boolean;
 } & JSX.IntrinsicElements['div']
 
-export function Foo({ children, background, bgColor, border, testTest, p, pl, pr, pb, pt, py, px, padding, fooSize, x, ...props }: FooProps) {
+export function Foo({ children, background, bgColor, testTest, p, pl, pr, pb, pt, py, px, padding, borderColor, borderWidth, borderStyle, border, fooSize, x, ...props }: FooProps) {
   return (
     <div
 	  {...props}
@@ -29,7 +32,6 @@ export function Foo({ children, background, bgColor, border, testTest, p, pl, pr
 	  style={{
 		["--background" as string]: background ? `var(--color-${background})` : undefined,
 		["--bg-color" as string]: bgColor ? `var(--color-${bgColor})` : undefined,
-		["--border" as string]: border ? border : undefined,
 		["--test-test" as string]: testTest ? testTest : undefined,
 		["--p" as string]: p ? `var(--spacing-${p})` : undefined,
 		["--pl" as string]: pl ? `var(--spacing-${pl})` : undefined,
@@ -38,7 +40,11 @@ export function Foo({ children, background, bgColor, border, testTest, p, pl, pr
 		["--pt" as string]: pt ? `var(--spacing-${pt})` : undefined,
 		["--py" as string]: py ? `var(--spacing-${py})` : undefined,
 		["--px" as string]: px ? `var(--spacing-${px})` : undefined,
-		["--padding" as string]: padding ? `var(--spacing-${padding})` : undefined
+		["--padding" as string]: padding ? `var(--spacing-${padding})` : undefined,
+		["--border-color" as string]: borderColor ? `var(--color-${borderColor})` : undefined,
+		["--border-width" as string]: borderWidth ? `var(--spacing-${borderWidth})` : undefined,
+		["--border-style" as string]: borderStyle ? `var(--borderStyle-${borderStyle})` : undefined,
+		["--border" as string]: border ? border : undefined
 	}}
     >
       {children}
