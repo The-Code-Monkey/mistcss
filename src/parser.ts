@@ -88,7 +88,6 @@ export function parseInput(input: string): Components {
         component.data[prop] ||= "string"
 
         if (prefix) {
-          console.log(prefix);
           const prefixArray = prefix.split(/(?<!-)(?=-[a-zA-Z0-9])/g);
           if (prefixArray.length > 1) {
             prefixArray.pop()
