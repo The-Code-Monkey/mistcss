@@ -70,6 +70,10 @@ export function parseInput(input: string): Components {
         continue
       }
 
+      if (component.data[prop] !== undefined) {
+        continue
+      }
+
       if (value && value.length > 1) {
         const prefixes = [];
 
@@ -87,11 +91,23 @@ export function parseInput(input: string): Components {
 
         component.data[prop] ||= "string"
 
+        const tailwindVars = ['color', 'spacing', 'shadow', 'radius', 'font-size'];
+
         if (prefix) {
           const prefixArray = prefix.split(/(?<!-)(?=-[a-zA-Z0-9])/g);
+
           if (prefixArray.length > 1) {
+            if (tailwindVars.includes(String(prefixArray[0]).replace('--', ''))) {
+              component.data[prop] = `string:${prefixArray[0]}`;
+              continue
+            } else if (tailwindVars.includes(String(prefixArray[0]).replace('--', '') + String(prefixArray[1]))) {
+              component.data[prop] = `string:${prefixArray[0]}${prefixArray[1]}`;
+              continue
+            }
+
             prefixArray.pop()
           }
+
           component.data[prop] = `string:${prefixArray.join('')}`
         }
       }
@@ -107,6 +123,10 @@ export function parseInput(input: string): Components {
       }
       const component = components[name]
       if (component === undefined) {
+        continue
+      }
+
+      if (component.data[prop] !== undefined) {
         continue
       }
 
@@ -135,7 +155,6 @@ export function parseInput(input: string): Components {
         if (Array.isArray(attr) && !attr.includes(value)) {
           attr.push(value)
         }
-        continue
       }
 
       // Parse boolean data attributes
@@ -147,7 +166,6 @@ export function parseInput(input: string): Components {
         }
 
         component.data[attribute] ||= true
-        continue
       }
     }
   }
