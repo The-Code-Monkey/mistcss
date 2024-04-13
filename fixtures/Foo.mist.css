@@ -1,54 +1,12 @@
 @scope (.foo) {
   div:scope {
-    --background: var(--color-black);
-    --bg-color: var(--background);
-    --test-test: true;
-    --p: var(--spacing-0);
-    --pl: var(--p);
-    --pr: var(--p);
-    --pb: var(--p);
-    --pt: var(--p);
-    --py: var(--pt) var(--pb);
-    --px: var(--pl) var(--pr);
-    --padding: var(--py) var(--px);
-    --border-color: var(--color-black);
-    --border-width: var(--spacing-px);
-    --border-style: var(--borderStyle-solid);
-    --border: var(--border-width) var(--border-style) var(--border-color);
-    --color: var(--color-black);
-
-    font-size: 1rem;
-    padding: var(--padding);
-    border: var(--border);
-
-    &[data-foo-size='lg'] {
-      font-size: 1.5rem;
-    }
-
-    &[data-foo-size='sm'] {
-      font-size: 0.75rem;
-    }
-
-    &[data-x] {
-      color: red;
-    }
-  }
-}
-
-@scope (.bar) {
-  span:scope {
-    &[data-bar-size='lg'] {
-      font-size: 1.5rem;
-    }
-
-    &[data-x] {
-      border-color: red;
-    }
-  }
-}
-
-@scope (.baz) {
-  p:scope {
-    font-size: 1rem;
+    --font-size: var(--font-size-base);
+    --font-weight: var(--font-weight-normal);
+    --font-style: var(--font-style-normal);
+    --font-family: var(--font-family-sans);
+    --font: var(--font-style) var(--font-weight) var(--font-size) var(--font-family);
+    --a: var(--color-red);
+    --b: var(--a);
+    --c: var(--b);
   }
 }

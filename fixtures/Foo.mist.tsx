@@ -3,87 +3,33 @@ import './Foo.mist.css'
 import type { JSX, ReactNode } from 'react'
 type FooProps = {
   children?: ReactNode;
-  background?: string;
-  bgColor?: string;
-  testTest?: string;
-  p?: string;
-  pl?: string;
-  pr?: string;
-  pb?: string;
-  pt?: string;
-  py?: string;
-  px?: string;
-  padding?: string;
-  borderColor?: string;
-  borderWidth?: string;
-  borderStyle?: string;
-  border?: string;
-  color?: string;
-  fooSize?: 'lg' | 'sm';
-  x?: boolean;
+  fontSize?: string;
+  fontWeight?: string;
+  fontStyle?: string;
+  fontFamily?: string;
+  font?: string;
+  a?: string;
+  b?: string;
+  c?: string;
 } & JSX.IntrinsicElements['div']
 
-export function Foo({ children, background, bgColor, testTest, p, pl, pr, pb, pt, py, px, padding, borderColor, borderWidth, borderStyle, border, color, fooSize, x, ...props }: FooProps) {
+export function Foo({ children, fontSize, fontWeight, fontStyle, fontFamily, font, a, b, c, ...props }: FooProps) {
   return (
     <div
 	  {...props}
 	  className="foo"
-	  data-fooSize={fooSize}
-	  data-x={x}
 	  style={{
-		["--background" as string]: background ? `var(--color-${background})` : undefined,
-		["--bg-color" as string]: bgColor ? `var(--color-${bgColor})` : undefined,
-		["--test-test" as string]: testTest ? testTest : undefined,
-		["--p" as string]: p ? `var(--spacing-${p})` : undefined,
-		["--pl" as string]: pl ? `var(--spacing-${pl})` : undefined,
-		["--pr" as string]: pr ? `var(--spacing-${pr})` : undefined,
-		["--pb" as string]: pb ? `var(--spacing-${pb})` : undefined,
-		["--pt" as string]: pt ? `var(--spacing-${pt})` : undefined,
-		["--py" as string]: py ? `var(--spacing-${py})` : undefined,
-		["--px" as string]: px ? `var(--spacing-${px})` : undefined,
-		["--padding" as string]: padding ? `var(--spacing-${padding})` : undefined,
-		["--border-color" as string]: borderColor ? `var(--color-${borderColor})` : undefined,
-		["--border-width" as string]: borderWidth ? `var(--spacing-${borderWidth})` : undefined,
-		["--border-style" as string]: borderStyle ? `var(--borderStyle-${borderStyle})` : undefined,
-		["--border" as string]: border ? border : undefined,
-		["--color" as string]: color ? `var(--color-${color})` : undefined
+		["--font-size" as string]: fontSize ? `var(--font-size-${fontSize})` : undefined,
+		["--font-weight" as string]: fontWeight ? `var(--font-weight-${fontWeight})` : undefined,
+		["--font-style" as string]: fontStyle ? `var(--font-style-${fontStyle})` : undefined,
+		["--font-family" as string]: fontFamily ? `var(--font-family-${fontFamily})` : undefined,
+		["--font" as string]: font ? font : undefined,
+		["--a" as string]: a ? `var(--color-${a})` : undefined,
+		["--b" as string]: b ? `var(--color-${b})` : undefined,
+		["--c" as string]: c ? `var(--color-${c})` : undefined
 	}}
     >
       {children}
     </div>
-  )
-}
-
-type BarProps = {
-  children?: ReactNode;
-  barSize?: 'lg';
-  x?: boolean;
-} & JSX.IntrinsicElements['span']
-
-export function Bar({ children, barSize, x, ...props }: BarProps) {
-  return (
-    <span
-	  {...props}
-	  className="bar"
-	  data-barSize={barSize}
-	  data-x={x}
-    >
-      {children}
-    </span>
-  )
-}
-
-type BazProps = {
-  children?: ReactNode;
-} & JSX.IntrinsicElements['p']
-
-export function Baz({ children, ...props }: BazProps) {
-  return (
-    <p
-	  {...props}
-	  className="baz"
-    >
-      {children}
-    </p>
   )
 }

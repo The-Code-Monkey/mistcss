@@ -28,7 +28,7 @@ function renderProps(component: Component, hasChildren: boolean): string {
     .join('\n');
 }
 
-const processVariable = <Type extends string | string[]>(key: string, component: Component): {
+const processVariable = <Type extends string | string[]>(key: string, component: Component, depth = 0): {
     propName: string;
     propValue: string;
     dataValue: Type;
@@ -37,6 +37,11 @@ const processVariable = <Type extends string | string[]>(key: string, component:
   const propValue = camelCase(key.replace('--', ''));
   let dataValue: string | string[] = component.data[key] as string | string[];
 
+  if (depth >= 4) {
+    throw new Error("Max Depth Reached: " + propName + ", look for circular dependencies or long chains of variables");
+  }
+
+
   if (typeof dataValue === 'string') {
     if (dataValue.split(',').length > 1) {
       const value = dataValue.split(',');
@@ -44,11 +49,11 @@ const processVariable = <Type extends string | string[]>(key: string, component:
         if (value[i]?.includes(':')) {
           const innerValue = value[i]?.split(':')[1];
           if (innerValue) {
-            const innerVariable = processVariable<string>(innerValue, component);
+            const innerVariable = processVariable<string>(innerValue, component, depth + 1);
             value[i] = innerVariable.dataValue;
           }
         } else {
-          const innerVariable = processVariable<string>(String(value[i]), component);
+          const innerVariable = processVariable<string>(String(value[i]), component, depth + 1);
           value[i] = innerVariable.dataValue;
         }
       }
@@ -60,7 +65,7 @@ const processVariable = <Type extends string | string[]>(key: string, component:
       if (value && key !== value) {
         const innerValue = component.data[value];
         if (innerValue) {
-          const innerVariable = processVariable(value, component);
+          const innerVariable = processVariable(value, component, depth + 1);
           dataValue = innerVariable.dataValue;
         }
       }
